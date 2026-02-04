@@ -1,11 +1,10 @@
 :root {
-  --bg: #eef3f5;
+  --bg: #eef4f7;
   --panel: #ffffff;
-  --text: #13313c;
-  --muted: #4a6973;
+  --text: #0f2f39;
+  --muted: #3f606c;
   --accent: #0f8b8d;
-  --accent-2: #f4a261;
-  --line: #d6e1e5;
+  --line: #d3e1e7;
   --danger: #b03a48;
   --shadow: 0 10px 28px rgba(17, 45, 53, 0.08);
 }
@@ -21,20 +20,19 @@ body {
   font-family: "Avenir Next", "Trebuchet MS", sans-serif;
   color: var(--text);
   background:
-    radial-gradient(circle at 15% 10%, #ffffff 0%, rgba(255, 255, 255, 0) 40%),
-    linear-gradient(160deg, #edf5f7 0%, #e6f0f3 52%, #f5efe6 100%);
+    radial-gradient(circle at 8% 10%, #ffffff 0%, rgba(255, 255, 255, 0) 44%),
+    linear-gradient(145deg, #e8f3f6 0%, #eef3f7 52%, #f5efe6 100%);
   min-height: 100vh;
 }
 
 .hero {
-  max-width: 1100px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 1.2rem 1rem 0.4rem;
+  padding: 1.2rem 1rem 0.45rem;
 }
 
 .hero h1 {
   margin: 0 0 0.45rem;
-  letter-spacing: 0.01em;
 }
 
 .hero p {
@@ -43,7 +41,7 @@ body {
 }
 
 .layout {
-  max-width: 1100px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 1rem;
   display: grid;
@@ -59,8 +57,17 @@ body {
   box-shadow: var(--shadow);
 }
 
+.apparatus {
+  grid-row: span 2;
+}
+
+.data,
+.assessment {
+  grid-column: span 2;
+}
+
 .panel h2 {
-  margin-top: 0;
+  margin: 0 0 0.4rem;
 }
 
 .control-group {
@@ -82,13 +89,14 @@ h3 {
 
 label {
   display: block;
-  margin: 0.4rem 0 0.3rem;
+  margin: 0.45rem 0 0.28rem;
   color: var(--muted);
   font-size: 0.92rem;
 }
 
 select,
 input[type="range"],
+input[type="number"],
 button {
   width: 100%;
 }
@@ -97,13 +105,23 @@ input[type="range"] {
   accent-color: var(--accent);
 }
 
+input[type="number"],
+select {
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  padding: 0.5rem;
+  font: inherit;
+  color: var(--text);
+  background: #fbfdfe;
+}
+
 button {
   border: 0;
   border-radius: 10px;
-  padding: 0.6rem 0.75rem;
+  padding: 0.62rem 0.75rem;
   font-weight: 600;
   color: #fff;
-  background: linear-gradient(135deg, var(--accent) 0%, #16729f 100%);
+  background: linear-gradient(135deg, var(--accent) 0%, #186c96 100%);
   cursor: pointer;
 }
 
@@ -112,18 +130,18 @@ button:hover {
 }
 
 button.ghost {
-  background: #e5edf0;
+  background: #e4edf1;
   color: var(--text);
 }
 
 .btn-row {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.5rem;
 }
 
 .readout {
-  margin: 0.55rem 0 0;
+  margin: 0.5rem 0 0;
 }
 
 .hint {
@@ -132,34 +150,125 @@ button.ghost {
   color: var(--muted);
 }
 
+.toggle-line {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.toggle-line input {
+  width: auto;
+}
+
 .meter-wrap {
   width: 100%;
   height: 16px;
-  margin-top: 0.7rem;
+  margin-top: 0.65rem;
   border-radius: 999px;
   background: #e2eaee;
-  overflow: hidden;
   border: 1px solid #d0dce1;
+  overflow: hidden;
 }
 
 .meter-fill {
   height: 100%;
   width: 0%;
-  background: linear-gradient(90deg, #88c847 0%, #ffc145 58%, #ef476f 100%);
+  background: linear-gradient(90deg, #8acb4c 0%, #ffc145 58%, #ef476f 100%);
   transition: width 100ms linear;
 }
 
+.apparatus-shell {
+  margin-top: 0.65rem;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: linear-gradient(180deg, #f9fcfd 0%, #f4f8fa 100%);
+  padding: 0.5rem;
+}
+
+#apparatusSvg {
+  width: 100%;
+  max-height: 420px;
+  display: block;
+}
+
+.tube-outline {
+  fill: none;
+  stroke: #4a6872;
+  stroke-width: 3;
+}
+
+.tube-air {
+  fill: #f6fdff;
+}
+
+.tube-water {
+  fill: #5aa9c5;
+  transition:
+    y 120ms linear,
+    height 120ms linear;
+}
+
+.cylinder-plate {
+  fill: #6f8b95;
+  transition: y 120ms linear;
+}
+
+.label {
+  font-size: 12px;
+  fill: #4c6974;
+}
+
+.guide-line {
+  stroke: #89a7b2;
+  stroke-width: 1.5;
+  stroke-dasharray: 4 3;
+}
+
+.fork-rack {
+  margin-top: 0.8rem;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.45rem;
+}
+
+.fork-btn {
+  background: #eaf2f6;
+  color: #0f2f39;
+  border: 1px solid #c8dae2;
+  position: relative;
+  padding-left: 1.9rem;
+}
+
+.fork-btn::before {
+  content: "U";
+  position: absolute;
+  left: 0.65rem;
+  top: 0.53rem;
+  font-weight: 700;
+  color: #2d7075;
+}
+
+.fork-btn.is-active {
+  color: #fff;
+  border-color: transparent;
+  background: linear-gradient(135deg, #0f8b8d 0%, #186c96 100%);
+}
+
+.fork-btn.is-active::before {
+  color: #fff;
+}
+
 .stats-grid {
-  margin-top: 0.75rem;
+  margin-top: 0.7rem;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0.5rem;
+  gap: 0.55rem;
 }
 
 .stat-card {
   border: 1px solid var(--line);
   border-radius: 10px;
-  padding: 0.7rem;
+  padding: 0.68rem;
   background: #fbfdfe;
 }
 
@@ -172,11 +281,19 @@ button.ghost {
 .stat-card strong {
   display: block;
   margin-top: 0.28rem;
-  color: var(--text);
+}
+
+#fitCanvas {
+  margin-top: 0.75rem;
+  width: 100%;
+  height: 300px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fcfefe;
 }
 
 .table-wrap {
-  margin-top: 0.75rem;
+  margin-top: 0.7rem;
   max-height: 340px;
   overflow: auto;
   border: 1px solid var(--line);
@@ -194,6 +311,7 @@ td {
   border-bottom: 1px solid var(--line);
   padding: 0.55rem 0.45rem;
   text-align: left;
+  white-space: nowrap;
 }
 
 thead th {
@@ -223,12 +341,27 @@ tbody tr:last-child td {
   font-weight: 700;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 980px) {
   .layout {
     grid-template-columns: 1fr;
   }
 
-  .hero {
-    padding-top: 0.9rem;
+  .apparatus,
+  .data,
+  .assessment {
+    grid-column: span 1;
+    grid-row: auto;
+  }
+
+  .btn-row {
+    grid-template-columns: 1fr;
+  }
+
+  .fork-rack {
+    grid-template-columns: 1fr;
+  }
+
+  #fitCanvas {
+    height: 260px;
   }
 }

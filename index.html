@@ -10,28 +10,45 @@
     <header class="hero">
       <h1>Resonance Tube: Speed of Sound Lab</h1>
       <p>
-        Inquiry flow: pick a frequency, move the water level to find the loudest
-        point, then record a trial and analyze accepted data.
+        Pick a tuning fork, move the cylinder to the loudest resonance, and use
+        your measurements to calculate the speed of sound.
       </p>
     </header>
 
     <main class="layout">
+      <section class="panel apparatus">
+        <h2>Apparatus View</h2>
+        <p class="hint">
+          Move the cylinder (water level) until resonance is strongest.
+        </p>
+        <div class="apparatus-shell">
+          <svg id="apparatusSvg" viewBox="0 0 280 430" role="img" aria-label="Resonance tube apparatus">
+            <rect x="120" y="40" width="40" height="340" rx="10" class="tube-outline"></rect>
+            <rect x="124" y="44" width="32" height="332" class="tube-air"></rect>
+            <rect id="waterColumn" x="124" y="240" width="32" height="136" class="tube-water"></rect>
+            <rect id="cylinderPlate" x="86" y="230" width="108" height="14" rx="6" class="cylinder-plate"></rect>
+            <text x="55" y="239" class="label">Cylinder</text>
+            <line x1="165" y1="40" x2="220" y2="40" class="guide-line"></line>
+            <line id="waterLineGuide" x1="165" y1="240" x2="220" y2="240" class="guide-line"></line>
+            <text x="225" y="44" class="label">Tube top</text>
+            <text id="waterLabel" x="225" y="244" class="label">Water</text>
+          </svg>
+        </div>
+        <div class="fork-rack" id="forkRack">
+          <button type="button" class="fork-btn" data-frequency="256">Fork 256 Hz</button>
+          <button type="button" class="fork-btn" data-frequency="288">Fork 288 Hz</button>
+          <button type="button" class="fork-btn is-active" data-frequency="320">Fork 320 Hz</button>
+          <button type="button" class="fork-btn" data-frequency="341">Fork 341 Hz</button>
+          <button type="button" class="fork-btn" data-frequency="384">Fork 384 Hz</button>
+          <button type="button" class="fork-btn" data-frequency="426">Fork 426 Hz</button>
+          <button type="button" class="fork-btn" data-frequency="480">Fork 480 Hz</button>
+        </div>
+      </section>
+
       <section class="panel controls">
         <h2>Controls</h2>
-
         <div class="control-group">
-          <h3>1) Frequency (Hz)</h3>
-          <label for="presetFrequency">Preset</label>
-          <select id="presetFrequency">
-            <option value="256">256</option>
-            <option value="288">288</option>
-            <option value="320" selected>320</option>
-            <option value="341">341</option>
-            <option value="384">384</option>
-            <option value="426">426</option>
-            <option value="480">480</option>
-          </select>
-
+          <h3>1) Frequency</h3>
           <label for="fineFrequency">
             Fine adjust (<span id="fineValue">0</span> Hz)
           </label>
@@ -43,15 +60,16 @@
             step="1"
             value="0"
           />
-
-          <p class="readout">Current frequency: <strong id="frequencyReadout">320.0</strong> Hz</p>
+          <p class="readout">
+            Current frequency: <strong id="frequencyReadout">320.0</strong> Hz
+          </p>
         </div>
 
         <div class="control-group">
-          <h3>2) Air-Column Length (m)</h3>
+          <h3>2) Cylinder Height (Air-Column Length)</h3>
           <div class="btn-row">
-            <button id="moveDown" type="button">Water Up (-)</button>
-            <button id="moveUp" type="button">Water Down (+)</button>
+            <button id="moveDown" type="button">Move Up (-)</button>
+            <button id="moveUp" type="button">Move Down (+)</button>
           </div>
 
           <input
@@ -71,18 +89,41 @@
         <div class="control-group">
           <h3>3) Sound + Resonance</h3>
           <button id="toneToggle" type="button">Start Tone</button>
+          <label class="toggle-line">
+            <input id="advancedMode" type="checkbox" />
+            Advanced mode (add higher harmonics to sound)
+          </label>
+          <label for="harmonicBlend">Harmonic blend</label>
+          <select id="harmonicBlend">
+            <option value="1">Fundamental only</option>
+            <option value="3">Fundamental + 3rd</option>
+            <option value="5">Fundamental + 3rd + 5th</option>
+          </select>
           <div class="meter-wrap" aria-label="Loudness meter">
             <div id="loudnessMeter" class="meter-fill"></div>
           </div>
           <p class="readout">Resonance quality: <strong id="qualityReadout">Poor</strong></p>
         </div>
+
+        <div class="control-group">
+          <h3>4) Data Columns</h3>
+          <label class="toggle-line">
+            <input id="showFourL" type="checkbox" checked />
+            Show 4L
+          </label>
+          <label class="toggle-line">
+            <input id="showPeriod" type="checkbox" checked />
+            Show Period (T = 1/f)
+          </label>
+        </div>
       </section>
 
       <section class="panel data">
-        <h2>Trial Data</h2>
+        <h2>Trial Data + 4L vs Period Graph</h2>
         <p class="hint">Record trials only when resonance is clear and stable.</p>
         <div class="btn-row">
           <button id="recordTrial" type="button">Record Trial</button>
+          <button id="fitLine" type="button">Linear Fit</button>
           <button id="clearTrials" type="button" class="ghost">Clear</button>
         </div>
 
@@ -92,25 +133,42 @@
             <strong id="acceptedReadout">0 / 0</strong>
           </div>
           <div class="stat-card">
-            <span>Mean accepted speed</span>
-            <strong id="meanSpeedReadout">--</strong>
+            <span>Fit equation</span>
+            <strong id="fitReadout">4L = --</strong>
           </div>
         </div>
 
+        <canvas id="fitCanvas" width="640" height="300"></canvas>
+        <p class="hint">Use the slope of 4L vs T to estimate speed of sound.</p>
+
         <div class="table-wrap">
           <table>
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>f (Hz)</th>
-                <th>L (m)</th>
-                <th>Quality</th>
-                <th>v (m/s)</th>
-              </tr>
-            </thead>
+            <thead id="trialTableHead"></thead>
             <tbody id="trialTableBody"></tbody>
           </table>
         </div>
+      </section>
+
+      <section class="panel assessment">
+        <h2>Assessment Mode</h2>
+        <p class="hint">
+          Practice prediction: given frequency find length, or given length find
+          frequency.
+        </p>
+        <label for="assessmentType">Challenge type</label>
+        <select id="assessmentType">
+          <option value="random">Random</option>
+          <option value="lengthFromFrequency">Predict length from frequency</option>
+          <option value="frequencyFromLength">Predict frequency from length</option>
+        </select>
+        <div class="btn-row">
+          <button id="newChallenge" type="button">New Challenge</button>
+          <button id="checkAnswer" type="button">Check Answer</button>
+        </div>
+        <p id="assessmentPrompt" class="readout">Press "New Challenge" to begin.</p>
+        <label for="assessmentInput">Your prediction</label>
+        <input id="assessmentInput" type="number" step="0.001" />
+        <p id="assessmentFeedback" class="hint"></p>
       </section>
     </main>
 

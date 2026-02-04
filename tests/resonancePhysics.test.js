@@ -38,3 +38,26 @@ test("computes accepted-trial stats only from accepted valid speeds", () => {
   assert.equal(stats.totalCount, 4);
   assert.equal(stats.meanSpeed, 342);
 });
+
+test("calculates period and four-times-length helpers", () => {
+  assert.ok(Math.abs(Physics.calculatePeriod(250) - 0.004) < 1e-12);
+  assert.equal(Physics.calculateFourL(0.33), 1.32);
+});
+
+test("calculates frequency from length as inverse equation", () => {
+  const frequency = Physics.calculateFrequencyFromLength(343, 0.25296875, 0.05);
+  assert.ok(Math.abs(frequency - 320) < 1e-9);
+});
+
+test("fits a line for 4L vs period points", () => {
+  const fit = Physics.linearFit([
+    { x: 0.003, y: 1.2 },
+    { x: 0.004, y: 1.6 },
+    { x: 0.005, y: 2.0 },
+  ]);
+
+  assert.ok(fit);
+  assert.ok(Math.abs(fit.slope - 400) < 1e-9);
+  assert.ok(Math.abs(fit.intercept) < 1e-9);
+  assert.ok(Math.abs(fit.r2 - 1) < 1e-12);
+});
