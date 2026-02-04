@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Speed of Sound Lab Simulator</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="hero">
+      <h1>Resonance Tube: Speed of Sound Lab</h1>
+      <p>
+        Inquiry flow: pick a frequency, move the water level to find the loudest
+        point, then record a trial and analyze accepted data.
+      </p>
+    </header>
+
+    <main class="layout">
+      <section class="panel controls">
+        <h2>Controls</h2>
+
+        <div class="control-group">
+          <h3>1) Frequency (Hz)</h3>
+          <label for="presetFrequency">Preset</label>
+          <select id="presetFrequency">
+            <option value="256">256</option>
+            <option value="288">288</option>
+            <option value="320" selected>320</option>
+            <option value="341">341</option>
+            <option value="384">384</option>
+            <option value="426">426</option>
+            <option value="480">480</option>
+          </select>
+
+          <label for="fineFrequency">
+            Fine adjust (<span id="fineValue">0</span> Hz)
+          </label>
+          <input
+            id="fineFrequency"
+            type="range"
+            min="-20"
+            max="20"
+            step="1"
+            value="0"
+          />
+
+          <p class="readout">Current frequency: <strong id="frequencyReadout">320.0</strong> Hz</p>
+        </div>
+
+        <div class="control-group">
+          <h3>2) Air-Column Length (m)</h3>
+          <div class="btn-row">
+            <button id="moveDown" type="button">Water Up (-)</button>
+            <button id="moveUp" type="button">Water Down (+)</button>
+          </div>
+
+          <input
+            id="lengthSlider"
+            type="range"
+            min="0.15"
+            max="1.20"
+            step="0.001"
+            value="0.55"
+          />
+          <p class="readout">Current length: <strong id="lengthReadout">0.550</strong> m</p>
+          <p class="hint">
+            Hint: First-harmonic resonance is strongest near quarter wavelength.
+          </p>
+        </div>
+
+        <div class="control-group">
+          <h3>3) Sound + Resonance</h3>
+          <button id="toneToggle" type="button">Start Tone</button>
+          <div class="meter-wrap" aria-label="Loudness meter">
+            <div id="loudnessMeter" class="meter-fill"></div>
+          </div>
+          <p class="readout">Resonance quality: <strong id="qualityReadout">Poor</strong></p>
+        </div>
+      </section>
+
+      <section class="panel data">
+        <h2>Trial Data</h2>
+        <p class="hint">Record trials only when resonance is clear and stable.</p>
+        <div class="btn-row">
+          <button id="recordTrial" type="button">Record Trial</button>
+          <button id="clearTrials" type="button" class="ghost">Clear</button>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <span>Accepted trials</span>
+            <strong id="acceptedReadout">0 / 0</strong>
+          </div>
+          <div class="stat-card">
+            <span>Mean accepted speed</span>
+            <strong id="meanSpeedReadout">--</strong>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>f (Hz)</th>
+                <th>L (m)</th>
+                <th>Quality</th>
+                <th>v (m/s)</th>
+              </tr>
+            </thead>
+            <tbody id="trialTableBody"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <script src="src/resonancePhysics.js" defer></script>
+    <script src="src/app.js" defer></script>
+  </body>
+</html>
