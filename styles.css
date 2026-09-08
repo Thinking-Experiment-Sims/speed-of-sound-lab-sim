@@ -72,13 +72,41 @@ body {
   padding-left: 0.4rem;
 }
 
-.kicker {
-  margin: 0;
+.brand-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
   font-size: 0.8rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--gold-400);
   font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--gold-500);
+  background: rgba(15, 126, 155, 0.1);
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  margin-bottom: 0.4rem;
+  border: 1px solid var(--border);
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+
+.brand-badge:hover {
+  background: rgba(15, 126, 155, 0.18);
+  color: var(--gold-400);
+}
+
+.lab-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #b5640e;
+  background: #fff3e5;
+  border: 1px solid #fedbb3;
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  margin-left: 0.5rem;
 }
 
 .hero h1 {
